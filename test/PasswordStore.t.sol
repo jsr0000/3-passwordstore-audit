@@ -9,7 +9,7 @@ contract PasswordStoreTest is Test {
     PasswordStore public passwordStore;
     DeployPasswordStore public deployer;
     address public owner;
-
+    address public randomAddress;
     function setUp() public {
         deployer = new DeployPasswordStore();
         passwordStore = deployer.run();
@@ -29,5 +29,16 @@ contract PasswordStoreTest is Test {
 
         vm.expectRevert(PasswordStore.PasswordStore__NotOwner.selector);
         passwordStore.getPassword();
+    }
+
+    function test_anyone_can_set_password() public {
+        vm.assume(randomAddress != owner);
+        vm.prank(randomAddress);
+        string memory expectedPassword = "myNewPassword";
+        passwordStore.setPassword(expectedPassword);
+
+        vm.prank(owner);
+        string memory actualPassword = passwordStore.getPassword();
+        assertEq(actualPassword, expectedPassword);
     }
 }

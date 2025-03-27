@@ -39,3 +39,51 @@ myPassword
 **Recommended Mitigation:** 
 
 Due to this, the overall architecture of the contract should be rethought. One could encrypt the password off-chain, and then store the encrypted password on-chain. This would require the user to remember another password off-chain to decrypt the password. However, you'd also likely want to remove the view function as you wouldn't want the user to accdently send a transaction with the password that decrypts your password.
+
+### [S-#] `PasswordStore::setPassword` has no access controls, meaning anyone can set the password
+
+**Description:** The `PasswordStore::setPassword` function is set to be an `external` function, however, the natspec of the function and overall purpose of the smart contract is that `this function allows only the owner to set a new password.`
+
+``` javascript
+    function setPassword(string memory newPassword) external {
+@>      // @audit - There are no access controls
+        s_password = newPassword;
+        emit SetNetPassword();
+    }
+```
+
+
+**Impact:** 
+
+Anyone can set/change the password of the contract. Severely breaking the contract intended functionality.
+
+**Proof of Concept:** 
+
+Add the following to the `PasswordStore.t.sol`:
+<details>
+<summary>Code</summary>
+
+```javascript
+function test_anyone_can_set_password() public {
+        vm.assume(randomAddress != owner);
+        vm.prank(randomAddress);
+        string memory expectedPassword = "myNewPassword";
+        passwordStore.setPassword(expectedPassword);
+
+        vm.prank(owner);
+        string memory actualPassword = passwordStore.getPassword();
+        assertEq(actualPassword, expectedPassword);
+    }
+```
+
+</details>
+
+**Recommended Mitigation:** 
+
+Add an access control conditional to the `setPassword` function.
+
+```javascript
+if(msg.sender != s_owner) {
+    revert PasswordStore__NotOwner();
+} 
+```
