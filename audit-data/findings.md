@@ -87,3 +87,29 @@ if(msg.sender != s_owner) {
     revert PasswordStore__NotOwner();
 } 
 ```
+
+### [S-#] The `PasswordStore::getPassword` natspec indicates a parameter that doesn't exist, causing the natspec to be incorrect.
+
+**Description:**
+```javascript
+/*
+ * @notice This allows only the owner to retrieve the password.
+@> * @param newPassword The new password to set.
+ */
+function getPassword() external view returns (string memory) {}
+```
+
+The `PasswordStore::getPassword` function signature is `getPassword()` while the natspec says it should be `getPassword(string)`.
+
+**Impact** The natspec is incorrect
+
+**Proof of Concept:**
+
+**Recommended Mitigation:** Remove the incorrect natspec line
+
+```diff
+    /*
+     * @notice This allows only the owner to retrieve the password.
+-     * @param newPassword The new password to set.
+     */
+```
