@@ -1,4 +1,5 @@
-### [S-#] Storing the password on-chain makes it visible to anyone, and no longer private 
+### [H-1] Storing the password on-chain makes it visible to anyone, and no longer private 
+
 
 **Description:** 
 
@@ -39,8 +40,11 @@ myPassword
 **Recommended Mitigation:** 
 
 Due to this, the overall architecture of the contract should be rethought. One could encrypt the password off-chain, and then store the encrypted password on-chain. This would require the user to remember another password off-chain to decrypt the password. However, you'd also likely want to remove the view function as you wouldn't want the user to accdently send a transaction with the password that decrypts your password.
-
-### [S-#] `PasswordStore::setPassword` has no access controls, meaning anyone can set the password
+## Likelihood & Impact:
+- Impact: HIGH
+- Likelihood: HIGH
+- Severity: HIGH
+### [H-2] `PasswordStore::setPassword` has no access controls, meaning anyone can set the password
 
 **Description:** The `PasswordStore::setPassword` function is set to be an `external` function, however, the natspec of the function and overall purpose of the smart contract is that `this function allows only the owner to set a new password.`
 
@@ -87,8 +91,11 @@ if(msg.sender != s_owner) {
     revert PasswordStore__NotOwner();
 } 
 ```
-
-### [S-#] The `PasswordStore::getPassword` natspec indicates a parameter that doesn't exist, causing the natspec to be incorrect.
+## Likelihood & Impact:
+- Impact: HIGH
+- Likelihood: HIGH
+- Severity: HIGH
+### [I-1] The `PasswordStore::getPassword` natspec indicates a parameter that doesn't exist, causing the natspec to be incorrect.
 
 **Description:**
 ```javascript
@@ -113,3 +120,7 @@ The `PasswordStore::getPassword` function signature is `getPassword()` while the
 -     * @param newPassword The new password to set.
      */
 ```
+## Likelihood & Impact:
+- Impact: NONE
+- Likelihood: NONE
+- Severity: Informational
