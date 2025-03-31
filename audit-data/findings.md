@@ -123,4 +123,4 @@ The `PasswordStore::getPassword` function signature is `getPassword()` while the
 ## Likelihood & Impact:
 - Impact: NONE
 - Likelihood: NONE
-- Severity: Informational
+- Severity: Informational 
