@@ -1,7 +1,7 @@
 ---
-title: Protocol Audit Report
+title: PasswordStore Audit Report
 author: Josh Regnart
-date: March 7, 2023
+date: April 1, 2025
 header-includes:
   - \usepackage{titling}
   - \usepackage{graphicx}
@@ -14,7 +14,7 @@ header-includes:
         \includegraphics[width=0.5\textwidth]{logo.pdf} 
     \end{figure}
     \vspace*{2cm}
-    {\Huge\bfseries Protocol Audit Report\par}
+    {\Huge\bfseries PasswordStore Audit Report\par}
     \vspace{1cm}
     {\Large Version 1.0\par}
     \vspace{2cm}
@@ -40,7 +40,7 @@ Lead Security Researcher:
 - [Audit Details](#audit-details)
   - [Scope](#scope)
   - [Roles](#roles)
-- [Executive Summary](#executive-summary)
+  - [Executive Summary](#executive-summary)
   - [Issues found](#issues-found)
 - [Findings](#findings)
   - [High](#high)
@@ -88,7 +88,10 @@ We use the [CodeHawks](https://docs.codehawks.com/hawks-auditors/how-to-evaluate
 
 - Owner: The user who can set the password and read the password.
 - Outsiders: No one else should be able to set or read the password.
-# Executive Summary
+
+## Executive Summary
+The security audit of the PasswordStore protocol revealed critical vulnerabilities that fundamentally undermine its core functionality as a secure password storage solution. Given these findings, particularly the first high-severity issue, the protocol requires a complete architectural redesign to achieve its security objectives. A potential solution could involve implementing off-chain encryption before storing passwords, though this would introduce additional complexity and user requirements.
+
 ## Issues found
 
 | Severity | Number of Issues Found |
@@ -214,9 +217,7 @@ function getPassword() external view returns (string memory) {}
 
 The `PasswordStore::getPassword` function signature is `getPassword()` while the natspec says it should be `getPassword(string)`.
 
-**Impact** The natspec is incorrect
-
-**Proof of Concept:**
+**Impact:** The natspec is incorrect
 
 **Recommended Mitigation:** Remove the incorrect natspec line
 
